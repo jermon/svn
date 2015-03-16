@@ -1,0 +1,16 @@
+---
+dependencies:
+  - { role: geerlingguy.apache }
+
+galaxy_info:
+  author: jermon
+  description: Apache SVN for RHEL/CentOS 6.x.
+  company: " - "
+  license: "license (GPL)"
+  min_ansible_version: 1.4
+  platforms:
+  - name: EL
+    versions:
+      - 6
+  categories:
+    - development

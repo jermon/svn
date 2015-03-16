@@ -1,0 +1,40 @@
+---
+
+  - name: yum subversion install 
+    yum: name={{item}} state=latest
+    with_items:
+      - subversion
+      - mod_dav_svn
+      - python-setuptools 
+
+  - name: install passlib
+    easy_install: name=passlib
+
+  - name: create dir {{cm_prefix}}/{{cm_project}}
+    file: path={{cm_prefix}}/{{cm_project}} owner=root group=root state=directory
+
+  - name: create repository 
+    command: svnadmin create {{cm_prefix}}/{{cm_project}}/svn creates={{cm_prefix}}/{{cm_project}}/svn
+
+  - name: Add admin user to a password file and ensure permissions are set
+    htpasswd: path={{cm_prefix}}/{{cm_project}}/htpasswd name={{cm_admin_user}} password={{cm_admin_pw}} owner=root group=root mode=644
+
+  - name: create dir /etc/httpd/conf.d/
+    file: path=/etc/httpd/conf.d/ owner=root group=root state=directory
+
+  - name: create webaccess
+    template: src=svn.j2 dest=/etc/httpd/conf.d/{{cm_project}}_svn.conf
+    notify: restart apache
+
+  - name: subversion loging
+    copy: src=subversion_log.conf dest=/etc/httpd/conf.d/subversion_log.conf owner=root group=root mode=0644
+
+  - name: subversion trunk
+    shell: svn ls file://{{cm_prefix}}/{{cm_project}}/svn/trunk || svn mkdir file://{{cm_prefix}}/{{cm_project}}/svn/trunk -m"ci trunk"
+
+  - name: subversion tags
+    shell: svn ls file://{{cm_prefix}}/{{cm_project}}/svn/tags || svn mkdir file://{{cm_prefix}}/{{cm_project}}/svn/tags -m"ci tags"
+
+  - name: subversion branches
+    shell: svn ls file://{{cm_prefix}}/{{cm_project}}/svn/branches || svn mkdir file://{{cm_prefix}}/{{cm_project}}/svn/branches -m"ci branches"
+

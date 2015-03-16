@@ -1,0 +1,7 @@
+---
+
+cm_prefix: "/var/CM"
+cm_project: "default"
+cm_admin_user: admin
+cm_admin_pw: admin
+

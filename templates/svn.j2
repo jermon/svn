@@ -1,0 +1,18 @@
+#{{ ansible_managed }}
+
+# Subversion
+# Make sure you uncomment the following if they are commented out
+# LoadModule dav_svn_module     modules/mod_dav_svn.so
+# LoadModule authz_svn_module   modules/mod_authz_svn.so
+
+# Add the following to allow a basic authentication and point Apache to where the actual
+# repository resides.
+<Location /svn/{{cm_project}}>
+        DAV svn
+        SVNPath {{cm_prefix}}/{{cm_project}}/svn
+        AuthType Basic
+        AuthName "{{cm_project}}"
+        AuthUserFile {{cm_prefix}}/{{cm_project}}/htpasswd
+        Require valid-user
+</Location>
+
