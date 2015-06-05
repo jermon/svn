@@ -19,6 +19,9 @@
   - name: Add admin user to a password file and ensure permissions are set
     htpasswd: path={{cm_prefix}}/{{cm_project}}/htpasswd name={{cm_admin_user}} password={{cm_admin_pw}} owner=root group=root mode=644
 
+  - name: Add jenkins user to a password file and ensure permissions are set
+    htpasswd: path={{cm_prefix}}/{{cm_project}}/htpasswd name={{cm_jenkins_user}} password={{cm_jenkins_pw}} owner=root group=root mode=644
+
   - name: create dir /etc/httpd/conf.d/
     file: path=/etc/httpd/conf.d/ owner=root group=root state=directory
 
